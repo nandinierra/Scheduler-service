@@ -20,7 +20,7 @@ const port = process.env.PORT || 3400;
 const main = async () => {
   await connectDB(process.env.MONGO_URI);
   await initializeSchedulers();
-  app.listen(port, () => console.log(`🚀 Server running on port ${port}`));
+  app.listen(port, () => console.log(`Server running on port ${port}`));
 };
 
 main();
