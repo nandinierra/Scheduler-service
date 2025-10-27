@@ -1,23 +1,50 @@
 #  Scheduler Microservice
 
+A production-ready Node.js microservice that automates job scheduling and execution using cron expressions.  
+It follows a scalable modular architecture for maintainability and future extensibility.
+
+---
+
 ##  Overview
-The **Scheduler Microservice** is a modular backend service built using **Node.js, Express, and MongoDB**.  
-It provides APIs for **creating, listing, and retrieving scheduled jobs**, storing all related job metadata in the database.
 
->  Note: This project simulates job scheduling — no real scheduling logic (like cron execution) is implemented, as per the assignment instructions.
+This microservice enables developers to **create, view, and schedule jobs dynamically** using REST APIs.  
+It leverages **Node.js**, **Express**, **MongoDB (via Mongoose)**, and **Node-Cron** for time-based execution.
 
----
-
-##  Features
-- **Job Scheduling API:** Allows flexible creation of dummy jobs with scheduling attributes.
-- **RESTful Endpoints:**
-  - `GET /jobs` — List all jobs.
-  - `GET /jobs/:id` — Fetch a job by its ID.
-  - `POST /jobs` — Create a new job.
-- **Database Integration:** Stores fields such as job name, description, interval, last run, next run, and status.
-- **Validation Middleware:** Ensures data integrity using `express-validator`.
-- **Error Handling Middleware:** Handles unexpected runtime errors gracefully.
-- **Modular Architecture:** Follows best coding practices and SOLID principles.
+The design follows clean separation of concerns across configuration, controllers, models, routes, and utilities.
 
 ---
 
+##  Tech Stack
+
+- **Node.js** — Runtime environment  
+- **Express.js** — Backend framework  
+- **MongoDB + Mongoose** — Database and schema management  
+- **Node-Cron** — Job scheduling library  
+- **dotenv** — Environment variable management  
+- **Nodemon** — Development automation tool  
+
+---
+
+## API endpoints
+1. GET /jobs/getAllJobs
+  Description:
+  Fetches all scheduled jobs from the database.
+
+2. GET /jobs/:id
+  Description:
+  Fetches details of a specific job by its unique ID.
+
+3. POST /jobs/createJob
+
+Description:
+Creates a new job with validation rules applied before scheduling.
+
+
+##  Setup Guide
+
+### 1. Clone Repository
+
+git clone <git repo url>
+cd scheduler-service
+npm install
+npm run dev

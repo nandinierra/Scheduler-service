@@ -1,52 +1,30 @@
-
-
-
 import cron from "node-cron";
-import { CronTime } from "cron";
+import { CronExpressionParser } from 'cron-parser';
 import Job from "../models/Job.js";
 
+export function scheduleJob() {
+  console.log("Triggered...")
 
 
-export const scheduleJob=(job)=>{
-  if (!cron.validate(job.interval)) {
-    console.error(`Invalid cron expression for job: ${job.name}`);
-    return;
-  }
-
-  console.log(` Scheduling job: ${job.name} (${job.interval})`);
-
-  cron.schedule(job.interval, async () => {
-    console.log(` Running job: ${job.name}`);
-
-      try {
-        const lastRun = new Date();
-
-      const cronTime = new CronTime(job.interval);
-      console.log("cronTime")
-      const nextRun = cronTime.sendAt();
-
-        await Job.findByIdAndUpdate(job._id, {
-          lastRun,
-          nextRun,
-          status: "status",
-        });
-
-
-      await Job.findByIdAndUpdate(job._id, { status: "completed" });
-      console.log(` Job completed: ${job.name}`);
-      } catch (error) {
-      console.error(` Error executing job "${job.name}":`, error);
-        await Job.findByIdAndUpdate(job._id, { status: "failed" });
+  cron.schedule("* * * * * * ", async () => {
+     const jobs = await Job.find();
+     for await (const job of jobs){
+      if(new Date() >= job.nextRun){
+           console.log(`Job executed: ${job.name}`);
+    try {
+      job.lastRun = new Date()
+      const interval = CronExpressionParser.parse(job.interval, { currentDate: new Date() });
+      job.nextRun = interval.next().toDate();
+      job.status = "completed"
+      await job.save();
+    }
+    catch (e) {
+      console.error(`Job failed: ${e.message}`)
+      job.status = "failed"
+      await job.save()
+    }
       }
+     }
   });
 }
 
-
-
-export const initializeSchedulers = async ()=> {
-  const jobs = await Job.find();
-  console.log("jobs", jobs);
-  jobs.forEach((job) => {
-    scheduleJob(job);
-  });
-}

@@ -1,13 +1,11 @@
 
 import Job from "../../models/Job.js";
-import { scheduleJob } from "../../utils/scheduler.js";
 
 
 export async function createJob(req, res, next) {
   try {
     const { name, description, interval } = req.body;
     const job = await Job.create({ name, description, interval});
-     scheduleJob(job);
     return res.status(201).json({ message: "Job created", job });
   } catch (err) {
     next(err);
