@@ -22,7 +22,6 @@ The service supports:
 ##  Architecture Components
 
 | Component | Description |
-|------------|-------------|
 | **Express Server** | Handles RESTful API requests and routes. |
 | **Controller Layer** | Implements business logic for job creation, listing, and retrieval. |
 | **Scheduler Utility** | Uses node-cron to execute jobs at defined intervals. |
